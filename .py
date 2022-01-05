@@ -3,7 +3,9 @@
 import random
 import nltk
 from nltk.tag.brill import Pos
+from nltk.corpus import stopwords
 import numpy as np
+from nltk.tokenize import word_tokenize
 
 
 
@@ -19,17 +21,51 @@ lines_2 = to_stjerner.read().splitlines()[2::4]
 lines_4 = fire_stjerner.read().splitlines()[2::4]
 lines_5 = fem_stjerner.read().splitlines()[2::4]
 
+#tokenize
+
 documents_1 = [(list(nltk.tokenize.word_tokenize(word)), 'neg') for word in lines_1]
 documents_2 = [(list(nltk.tokenize.word_tokenize(word)), 'neg') for word in lines_2]
 documents_4 = [(list(nltk.tokenize.word_tokenize(word)), 'pos') for word in lines_4]
 documents_5 = [(list(nltk.tokenize.word_tokenize(word)), 'pos') for word in lines_5]
+
+documents = documents_1+documents_2+documents_4+documents_5
+
+stop_words = set(stopwords.words('english'))
+
+
+
+words2 = []
+
+for i in range(len(documents)):
+    words2 = words2 + documents[i][0]
+print(len(words2))
+
+for tuples in documents:
+    t = 0
+    for w in tuples[0]:
+        if w in stop_words:
+            tuples[0].pop(t)
+            #print(w)
+        else:
+            t+=1
+
+
+#nltk.download('punkt')
+ps = nltk.stem.PorterStemmer()
+
+
+
+#tokens = [ps.stem(_) for _ in word_tokenize(text[index])]
+
+#print(tokens)
+
 
 en_stjerner.close()
 to_stjerner.close()
 fire_stjerner.close()
 fem_stjerner.close()
 
-documents = documents_1+documents_2+documents_4+documents_5
+
 
 pos = 0
 neg = 0
@@ -47,6 +83,7 @@ words = []
 
 for i in range(len(documents)):
     words = words + documents[i][0]
+print(len(words))
 
 
 
