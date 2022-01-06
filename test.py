@@ -63,10 +63,11 @@ testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 print(test," : ", classifier.classify(testt))
 
 #%%
-test = ""
+test = "that movie was just awful and boring and lame"
 
 
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
 
 print(test," : ", classifier.classify(testt))
+# %%
