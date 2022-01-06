@@ -6,6 +6,7 @@ from nltk.tag.brill import Pos
 import numpy as np
 
 
+to_og_fire_stjerner = False
 
 #dokumenter
 
@@ -28,20 +29,17 @@ en_stjerner.close()
 to_stjerner.close()
 fire_stjerner.close()
 fem_stjerner.close()
+if to_og_fire_stjerner == True:
+    documents = documents_1+documents_2+documents_4+documents_5
+elif to_og_fire_stjerner == False:
+    documents = documents_1+documents_5
 
-documents = documents_1+documents_2+documents_4+documents_5
 
-pos = 0
-neg = 0
 
 random.seed(4)
 random.shuffle(documents)
 
-for i in range(int(len(documents)/2)):
-    if documents[i][1] == "pos":
-        pos+=1
-    else:
-        neg+=1
+
 
 words = []
 
@@ -67,7 +65,7 @@ def document_features(document):
 
 # Train Naive Bayes classifier
 featuresets = [(document_features(d), c) for (d,c) in documents]
-train_set, test_set = featuresets[89:], featuresets[:89]
+train_set, test_set = featuresets[120:], featuresets[:120]
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 
 
@@ -76,7 +74,7 @@ print(nltk.classify.accuracy(classifier, test_set))
 
 
 # Show the most important features as interpreted by Naive Bayes
-classifier.show_most_informative_features(10)
+classifier.show_most_informative_features(30)
 
 
 #tre_stjerner = open("5stjerner.txt")
@@ -89,7 +87,7 @@ classifier.show_most_informative_features(10)
 
 
 
-test = "fast fast fast fast"
+test = "on back of the set ordered"
 
 
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
