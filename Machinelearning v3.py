@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jan  6 11:26:29 2022
 
-@author: gustavnielsen
-"""
+
 import nltk
 from nltk.corpus import stopwords
 from nltk.tag.brill import Pos
@@ -13,28 +10,28 @@ import string
 
 #Naive bayes with new bag of words representation
 #Open review documents
-file = open('1stjerner.txt')
+file = open('auto_1stjerner.txt')
 textdocument1 = file.read().splitlines()
 stjerner1=[]
 for a in range(len(textdocument1[2::4])):
     stjerner1.append(list(nltk.tokenize.word_tokenize(textdocument1[2::4][a])))
 file.close()
 
-file = open('2stjerner.txt')
+file = open('auto_2stjerner.txt')
 textdocument2 = file.read().splitlines()
 stjerner2=[]
 for a in range(len(textdocument2[2::4])):
     stjerner2.append(list(nltk.tokenize.word_tokenize(textdocument2[2::4][a])))
 file.close()
 
-file = open('4stjerner.txt')
+file = open('auto_4stjerner.txt')
 textdocument3 = file.read().splitlines()
 stjerner4=[]
 for a in range(len(textdocument3[2::4])):
     stjerner4.append(list(nltk.tokenize.word_tokenize(textdocument3[2::4][a])))
 file.close()
 
-file = open('5stjerner.txt')
+file = open('auto_5stjerner.txt')
 textdocument4 = file.read().splitlines()
 stjerner5=[]
 for a in range(len(textdocument4[2::4])):
@@ -70,14 +67,14 @@ for words in neg_reviews:
 random.shuffle(pos_reviews_set)
 random.shuffle(neg_reviews_set)
 
-test_set = pos_reviews_set[:90] + neg_reviews_set[:90]
-train_set = pos_reviews_set[90:] + neg_reviews_set[90:]
+test_set = pos_reviews_set[:500] + neg_reviews_set[:500]
+train_set = pos_reviews_set[500:] + neg_reviews_set[500:]
 
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 accuracy = nltk.classify.accuracy(classifier, test_set)
 print(accuracy)
 
-custom_review = ""
+custom_review = "im so happy for my delivery"
 custom_review_tokens = nltk.word_tokenize(custom_review)
 custom_review_set = bag_of_words(custom_review_tokens)
 print (classifier.classify(custom_review_set))
@@ -86,5 +83,3 @@ print (classifier.classify(custom_review_set))
 prob_result = classifier.prob_classify(custom_review_set)
 print (prob_result.prob("neg")) # Output: 0.776128854994
 print (prob_result.prob("pos")) # Output: 0.223871145006
-
-
