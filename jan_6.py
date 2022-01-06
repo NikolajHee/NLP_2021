@@ -49,6 +49,7 @@ for i in range(len(documents)):
 
 
 
+
 # Define the feature extractor
 
 all_words = nltk.FreqDist(w.lower() for w in words)
@@ -65,7 +66,7 @@ def document_features(document):
 
 # Train Naive Bayes classifier
 featuresets = [(document_features(d), c) for (d,c) in documents]
-train_set, test_set = featuresets[120:], featuresets[:120]
+train_set, test_set = featuresets[60:], featuresets[:60]
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 
 
@@ -74,7 +75,7 @@ print(nltk.classify.accuracy(classifier, test_set))
 
 
 # Show the most important features as interpreted by Naive Bayes
-classifier.show_most_informative_features(30)
+classifier.show_most_informative_features(120)
 
 
 #tre_stjerner = open("5stjerner.txt")
@@ -85,17 +86,27 @@ classifier.show_most_informative_features(30)
 #    testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 #    print(test," : ", classifier.classify(testt))
 
+#%%
 
-
-test = "on back of the set ordered"
-
+test = "not ordered ther do disappointed out them website"
 
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
+print(test," : ", classifier.classify(testt))
+
+#%%
+
+test = "quick quick out good definitely much delivery happy"
+
+testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
 print(test," : ", classifier.classify(testt))
 
 
+# %%
+test = "quick good really recommend and to definitely much delivery happy time 22 8 buying clearly comming communication companies could couldn different extra free having help huge less matter need needed online part presentation quality shipment super surprise timely try work"
 
+testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
+print(test," : ", classifier.classify(testt))
 # %%
