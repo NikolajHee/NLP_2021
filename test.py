@@ -48,9 +48,22 @@ featuresets = [(document_features(d), c) for (d,c) in documents]
 train_set, test_set = featuresets[25:], featuresets[:25]
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 
+classifier.show_most_informative_features(10)
+
+
 print(nltk.classify.accuracy(classifier, test_set))
 
+
 test = "the movie was outstanding"
+
+
+testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
+
+
+print(test," : ", classifier.classify(testt))
+
+#%%
+test = ""
 
 
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}

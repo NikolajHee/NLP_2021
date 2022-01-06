@@ -4,37 +4,18 @@ import random
 import nltk
 from nltk.tag.brill import Pos
 import numpy as np
+from nltk.corpus import movie_reviews
 
 
-to_og_fire_stjerner = False
+
 
 #dokumenter
 
-en_stjerner = open("1stjerner.txt")
-to_stjerner = open("2stjerner.txt")
-fire_stjerner = open("4stjerner.txt")
-fem_stjerner = open("5stjerner.txt")
+documents = [(list(movie_reviews.words(fileid)), category)
+              for category in movie_reviews.categories()
+              for fileid in movie_reviews.fileids(category)]
 
-lines_1 = en_stjerner.read().splitlines()[2::4]
-lines_2 = to_stjerner.read().splitlines()[2::4]
-lines_4 = fire_stjerner.read().splitlines()[2::4]
-lines_5 = fem_stjerner.read().splitlines()[2::4]
-
-documents_1 = [(list(nltk.tokenize.word_tokenize(word)), 'neg') for word in lines_1]
-documents_2 = [(list(nltk.tokenize.word_tokenize(word)), 'neg') for word in lines_2]
-documents_4 = [(list(nltk.tokenize.word_tokenize(word)), 'pos') for word in lines_4]
-documents_5 = [(list(nltk.tokenize.word_tokenize(word)), 'pos') for word in lines_5]
-
-en_stjerner.close()
-to_stjerner.close()
-fire_stjerner.close()
-fem_stjerner.close()
-if to_og_fire_stjerner == True:
-    documents = documents_1+documents_2+documents_4+documents_5
-elif to_og_fire_stjerner == False:
-    documents = documents_1+documents_5
-
-
+random.shuffle(documents)
 
 random.seed(4)
 random.shuffle(documents)
@@ -52,7 +33,7 @@ for i in range(len(documents)):
 
 # Define the feature extractor
 
-all_words = nltk.FreqDist(w.lower() for w in words)
+all_words = nltk.FreqDist(w.lower() for w in movie_reviews.words())
 word_features = list(all_words)[:2000]
 
 def document_features(document):
@@ -66,7 +47,7 @@ def document_features(document):
 
 # Train Naive Bayes classifier
 featuresets = [(document_features(d), c) for (d,c) in documents]
-train_set, test_set = featuresets[60:], featuresets[:60]
+train_set, test_set = featuresets[1222:], featuresets[:1222]
 classifier = nltk.NaiveBayesClassifier.train(train_set)
 
 
@@ -88,25 +69,10 @@ classifier.show_most_informative_features(120)
 
 #%%
 
-test = "not ordered ther do disappointed out them website"
+test = "Order was delivered in 8 days, package presentation was what you would expect from price point. I was having a really hard time finding shoe in the size that I needed. I would absolutely order from FF again under the same circumstances. Thanks for the super quick shipment."
 
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
 print(test," : ", classifier.classify(testt))
 
-#%%
-
-test = "quick quick out good definitely much delivery happy"
-
-testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
-
-print(test," : ", classifier.classify(testt))
-
-
-# %%
-test = "quick good really recommend and to definitely much delivery happy time 22 8 buying clearly comming communication companies could couldn different extra free having help huge less matter need needed online part presentation quality shipment super surprise timely try work"
-
-testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
-
-print(test," : ", classifier.classify(testt))
 # %%
