@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-
 import nltk
 from nltk.corpus import stopwords
 from nltk.tag.brill import Pos
