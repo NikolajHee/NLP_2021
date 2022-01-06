@@ -2,19 +2,22 @@ from requests import get
 from time import sleep
 from random import randint
 from bs4 import BeautifulSoup
+from IPython.core.display import clear_output
 
 
 
-pages = [str(i) for i in range(2,10)]
-stars = '4'
-file = 'print.txt'
+pages = [str(i) for i in range(2,25)]
+stars = '2'
+file = 'auto_2stjerner.txt'
 
-textfile = open("print.txt", 'w')
+textfile = open(file, 'w')
 t = 0
+p = 0
 for page in pages:
+    p+=1
     response = get('https://dk.trustpilot.com/review/www.farfetch.com?languages=en&page=' + page + '&stars=' + stars)
     
-    sleep(randint(8,15))
+    sleep(randint(10,17))
 
     html_soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -26,15 +29,20 @@ for page in pages:
             text = first_review.p.text + '\n' + '\n'
             if text[0:3]=='Læs':
                 raise AttributeError
+            elif text[0:23]=='Besvarelse fra Farfetch':
+                raise AttributeError
             t+=1
             #title = first_review.h2.a.text + '\n' + '\n'
             textfile.write(str(t) + '\n' + '\n')
             textfile.write(text)
             
-            print(t)
+            mes = str(t)
         except AttributeError:
-            print("no text")
+            mes = 'no text'
+        print("Line: {}; Page: {};".format(mes,p))
+        clear_output(wait = True)
 
+print("DONE.")
 
 textfile.close()
-print("Done.")
+
