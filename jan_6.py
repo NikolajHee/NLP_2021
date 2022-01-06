@@ -88,7 +88,7 @@ classifier.show_most_informative_features(120)
 
 #%%
 
-test = "not ordered ther do disappointed out them website"
+test = "Order was delivered in 8 days, package presentation was what you would expect from price point. I was having a really hard time finding shoe in the size that I needed. I would absolutely order from FF again under the same circumstances. Thanks for the super quick shipment."
 
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
@@ -104,8 +104,7 @@ print(test," : ", classifier.classify(testt))
 
 
 # %%
-test = "quick good really recommend and to definitely much delivery happy time 22 8 buying clearly comming communication companies could couldn different extra free having help huge less matter need needed online part presentation quality shipment super surprise timely try work"
-
+test = "After purchasing the product a week, it has extra 30% off on this item, and I’m super irritated. I had already used it, so I cannot return it and repurchase it.  "
 testt = {word: (word in nltk.word_tokenize(test.lower())) for word in all_words}
 
 print(test," : ", classifier.classify(testt))
