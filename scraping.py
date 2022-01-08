@@ -8,9 +8,9 @@ from IPython.core.display import clear_output
 
 pages = [str(i) for i in range(2,25)]
 stars = '2'
-file = 'auto_2stjerner.txt'
+file = 'Auto/auto_2stjerner.txt'
 
-textfile = open(file, 'w')
+textfile = open('Auto/auto_'+stars+'stjerner.txt', 'w')
 t = 0
 p = 0
 for page in pages:
