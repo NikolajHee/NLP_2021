@@ -37,19 +37,62 @@ file.close()
 pos_reviews=stjerner4+stjerner5
 neg_reviews=stjerner1+stjerner2
 
-stop_words = set(stopwords.words("english"))
-stop_words.update(["i",".",",","'","?","’","(",")","-","$","%",":","...","!","1","2","3","4","5","one","two","three","four","five"])
-def bag_of_words(words):
-	words_clean = []
+from nltk import ngrams
 
+
+
+#stop_words = set(stopwords.words("english"))
+stopwords_english = stopwords.words("english")
+
+#stop_words.update(["i",".",",","'","?","’","(",")","-","$","%",":","...","!","1","2","3","4","5","one","two","three","four","five"])
+
+
+def clean_words(words, stopwords_english):
+	words_clean = []
 	for word in words:
 		word = word.lower()
-		if word not in stop_words and word not in string.punctuation:
+		if word not in stopwords_english and word not in string.punctuation:
 			words_clean.append(word)
-	
-	words_dictionary = dict([word, True] for word in words_clean)
-	
+	return words_clean
+
+
+
+
+def bag_of_words(words):
+	words_dictionary = dict([word,True] for word in words)
 	return words_dictionary
+
+def bag_of_ngrams(words, n=2):
+	words_ng = []
+	for item in iter(ngrams(words,n)):
+		words_ng.append(item)
+	words_dictionary = dict([word,True] for word in words_ng)
+	return words_dictionary
+
+
+important_words = ['above', 'below', 'off', 'over', 'under', 'more', 'most', 'such', 'no', 'nor', 'not', 'only', 'so', 'than', 'too', 'very', 'just', 'but']
+
+stopwords_english_for_bigrams = set(stopwords_english) - set(important_words)
+
+
+
+
+
+
+def bag_of_all_words(words, n=2):
+	words_clean = clean_words(words, stopwords_english)
+	words_clean_for_bigrams = clean_words(words, stopwords_english_for_bigrams)
+
+	unigram_features = bag_of_words(words_clean)
+	bigram_features = bag_of_ngrams(words_clean_for_bigrams)
+
+	all_features = unigram_features.copy()
+	all_features.update(bigram_features)
+
+	return all_features
+
+
+
 #Feature sets
 pos_reviews_set = []
 for words in pos_reviews:
