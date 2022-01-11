@@ -47,7 +47,7 @@ for docs in neg_reviews:
 labels=pos_reviews_labels+neg_reviews_labels
 
 #Vectorise and make model
-vectorizer = TfidfVectorizer (max_features=2500, min_df=5, max_df=0.8, stop_words=stopwords.words('english')) 
+vectorizer = TfidfVectorizer(max_features=2500, min_df=5, max_df=0.8, stop_words=stopwords.words('english')) 
 processed_features = vectorizer.fit_transform(all_reviews).toarray()
 
 from sklearn.model_selection import train_test_split
