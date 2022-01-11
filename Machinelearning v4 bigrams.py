@@ -1,5 +1,5 @@
 #imports
-from sklearn.naive_bayes import BernoulliNB
+from sklearn.naive_bayes import MultinomialNB
 import nltk
 from nltk.corpus import stopwords
 from nltk.tag.brill import Pos
@@ -97,16 +97,19 @@ random.shuffle(neg_reviews_set)
 test_set = pos_reviews_set[600:] + neg_reviews_set[600:]
 train_set = pos_reviews_set[:600] + neg_reviews_set[:600]
 
-classifier = nltk.NaiveBayesClassifier.train(train_set)
-accuracy = nltk.classify.accuracy(classifier, test_set)
-print(accuracy)
 
-#Custom review and its probability of neg and pos
-custom_review = "Once I got started with my order everything went smoothly. The only drawback for me is not excepting American Express because that is my main form of payment. Marion"
-custom_review_tokens = nltk.word_tokenize(custom_review)
-custom_review_set = bag_of_all_words(custom_review_tokens)
-print (classifier.classify(custom_review_set))
 
+
+
+clf = MultinomialNB().fit(X_train_tfidf, twenty_train.target)
+
+
+
+
+
+
+
+#file printing
 file = open("output.txt", 'a')
 date = datetime.datetime.now()
 file.write(str(date.day)+'-'+str(date.month)+'-'+str(date.year)+'--'+str(date.hour)+':'+str(date.minute)+" : Accuracy: "+ str(accuracy) + '\n')
@@ -118,6 +121,3 @@ prob_result = classifier.prob_classify(custom_review_set)
 print (prob_result.prob("neg"))
 print (prob_result.prob("pos"))
 
-
-clf = BernoulliNB()
-clf.fit()
