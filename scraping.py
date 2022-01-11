@@ -7,8 +7,7 @@ from IPython.core.display import clear_output
 
 
 pages = [str(i) for i in range(2,25)]
-stars = '2'
-file = 'Auto/auto_2stjerner.txt'
+stars = '1'
 
 textfile = open('Auto/auto_'+stars+'stjerner.txt', 'w')
 t = 0
@@ -39,10 +38,29 @@ for page in pages:
             mes = str(t)
         except AttributeError:
             mes = 'no text'
-        print("Line: {}; Page: {};".format(mes,p))
-        clear_output(wait = True)
+        finally:
+            print("Line: {}; Page: {};".format(mes,p))
+            clear_output(wait = True)
 
 print("DONE.")
 
 textfile.close()
 
+
+#%%
+
+from requests import get
+from time import sleep
+from random import randint
+from bs4 import BeautifulSoup
+from IPython.core.display import clear_output
+
+
+page = '2'
+stars = '1'
+response = get('https://dk.trustpilot.com/review/www.farfetch.com?languages=en&page=' + page + '&stars=' + stars)
+html_soup = BeautifulSoup(response.text, 'html.parser')
+
+review_container = html_soup.find_all('div', class_='paper_paper__1PY90 paper_square__lJX8a card_card__lQWDv card_noPadding__D8PcU styles_cardWrapper__LcCPA styles_show__HUXRb styles_reviewCard__9HxJJ')
+
+# %%

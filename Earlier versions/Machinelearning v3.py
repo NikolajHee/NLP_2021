@@ -42,9 +42,10 @@ from nltk import ngrams
 
 
 #stop_words = set(stopwords.words("english"))
-stopwords_english = stopwords.words("english")
 
-#stop_words.update(["i",".",",","'","?","’","(",")","-","$","%",":","...","!","1","2","3","4","5","one","two","three","four","five"])
+
+stopwords_english = stopwords.words("english")+["i",".",",","'","?","’","(",")","-","$","%",":","...","!","1","2","3","4","5","one","two","three","four","five"]
+
 
 
 def clean_words(words, stopwords_english):
@@ -103,7 +104,7 @@ for words in neg_reviews:
 	neg_reviews_set.append((bag_of_words(words), 'neg'))
 
 #Randomize sets
-random.seed(2)
+random.seed()
 random.shuffle(pos_reviews_set)
 random.shuffle(neg_reviews_set)
 
@@ -123,6 +124,3 @@ print (classifier.classify(custom_review_set))
 prob_result = classifier.prob_classify(custom_review_set)
 print ("pos_prob: ", prob_result.prob("pos")) # Output: 0.223871145006
 print ("neg_prob: ", prob_result.prob("neg")) # Output: 0.776128854994
-
-
-
