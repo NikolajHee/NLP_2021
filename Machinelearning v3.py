@@ -123,3 +123,6 @@ print (classifier.classify(custom_review_set))
 prob_result = classifier.prob_classify(custom_review_set)
 print ("pos_prob: ", prob_result.prob("pos")) # Output: 0.223871145006
 print ("neg_prob: ", prob_result.prob("neg")) # Output: 0.776128854994
+
+
+
