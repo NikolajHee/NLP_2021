@@ -42,25 +42,41 @@ text_classifier = MultinomialNB()
 
 acc_score = []
 
+score = np.zeros(len(processed_features))
+
 for train_index, test_index in kf.split(processed_features, y):
     X_train, X_test = processed_features[train_index], processed_features[test_index]
     y_train, y_test = y[train_index], y[test_index]
 
     text_classifier.fit(X_train, y_train)
     pred_values = text_classifier.predict(X_test)
+    #print(test_index)
+    i = 0
+    for t in test_index:
+        if pred_values[i] == list(y_test)[i]:
+            score[t] = True
+        else:
+            score[t] = False
+        i+=1
 
     acc = accuracy_score(pred_values, y_test)
     acc_score.append(acc)
 
+   
 avg_acc_score = sum(acc_score)/k
 
-predictions = text_classifier.predict(X_test)
+list_of_index = np.where(score==False)
 
 
 
-print(confusion_matrix(y_test,predictions))
-print(classification_report(y_test,predictions))#
-print(accuracy_score(y_test, predictions))
+
+print(avg_acc_score)
+
+#predictions = text_classifier.predict(X_test)
+
+#print(confusion_matrix(y_test,predictions))
+#print(classification_report(y_test,predictions))#
+##print(accuracy_score(y_test, predictions))
 
 
 
@@ -68,6 +84,9 @@ print(accuracy_score(y_test, predictions))
 print(text_classifier.predict(vectorizer.transform(["my dress fitted perfectly, it was beautiful"])))
 
 #print(text_classifier.predict(vectorizer.transform(["my dress was too msall, and the box was horrible"])))
+
+print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
+
 
 
 
