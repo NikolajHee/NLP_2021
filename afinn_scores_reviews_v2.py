@@ -42,8 +42,9 @@ indexwrong=[]
 for i in range(len(ascore)):
  if ([q[1] for q in ascore][i])==([q[1] for q in all_reviews][i]):
      correct+=1
+     indexwrong.append(1)
  else:
-     indexwrong.append(i)
+     indexwrong.append(0)
      
 accuracy=correct/len(ascore)      
 #print(accuracy)
