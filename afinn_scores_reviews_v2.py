@@ -11,7 +11,7 @@ import collections
 
 afinn=Afinn()
 
-path = 'current_data_set1.csv'
+path = 'Auto/data_set.csv'
 df = pd.read_csv(path)
 
 all_reviews = list(zip(df['Data'],df['Category']))
@@ -66,3 +66,4 @@ print ('neg precision:', nltk.precision(refsets['neg'], testsets['neg']))
 print ('neg recall:', nltk.recall(refsets['neg'], testsets['neg']))
 print ('neg F-measure:', nltk.f_measure(refsets['neg'], testsets['neg']))
 print(nltk.ConfusionMatrix(labels,tests)) 
+
