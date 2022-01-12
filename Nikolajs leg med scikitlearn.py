@@ -61,6 +61,7 @@ for train_index, test_index in kf.split(processed_features, y):
 
     acc = accuracy_score(pred_values, y_test)
     acc_score.append(acc)
+    print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 
    
 avg_acc_score = sum(acc_score)/k
