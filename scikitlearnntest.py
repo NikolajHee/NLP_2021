@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-df = pd.read_csv("Auto/newest_newest_data_set.csv")
+df = pd.read_csv("Auto/data_set.csv")
 df.head()
 
 print(df.shape)
@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn import svm
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1, stratify = y)
 
 
 
