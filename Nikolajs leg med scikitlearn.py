@@ -21,6 +21,7 @@ y = df['Category'] #Labels
 
 from sklearn.model_selection import KFold,StratifiedKFold
 k = 5
+random_state=None
 kf = StratifiedKFold(n_splits = k, random_state=None)
 
 
