@@ -3,13 +3,13 @@ import numpy as np
 import pandas as pd
 
 
-df = pd.read_csv("Auto/data_set.csv")
+df = pd.read_csv("Auto/newest_newest_data_set.csv")
 df.head()
 
 print(df.shape)
 
 X = df['Data']
-y = df['Catagory']
+y = df['Category']
 
 #test - training split
 
@@ -105,15 +105,13 @@ text = file.readlines()
 lines = text[2::4]
 file.close()
 
-for line in lines:
-    print(line + ": ")
-    print(model.predict(bow_transformer.transform([line])))
-    time.sleep(2)
+#for line in lines:
+#    print(line + ": ")
+#    print(model.predict(bow_transformer.transform([line])))
+#    time.sleep(2)
 
 
 
+#&apos;
+#&qout;
 
-
-
-
-# %%

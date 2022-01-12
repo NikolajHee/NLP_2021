@@ -11,11 +11,11 @@ import csv
 
 #textfile = open('Auto/auto_'+stars+'stjerner.txt', 'w')
 
-f = open('Auto/data_set.csv','w')
+f = open('Auto/newest_newest_data_set.csv','w')
 
 writer = csv.writer(f)
 
-header = ['Title','Data','Catagory']
+header = ['Title','Data','Category']
 
 writer.writerow(header)
 
@@ -25,11 +25,12 @@ writer.writerow(header)
 
 
 stars = ['1','2','4','5']
-max_pages = [25,20,20,25]
+max_pages = [28,18,18,28]
 category = ['neg','neg','pos','pos']
 
 
 for i in range(4):
+    print("Stars: " + str(i))
     star = stars[i]
     max_page = max_pages[i]
     pages = [str(j) for j in range(2,max_page)]
@@ -37,17 +38,24 @@ for i in range(4):
     
     t = 0
     p = 0
+    mes = 0
     for page in pages:
         p+=1
         response = get('https://dk.trustpilot.com/review/www.farfetch.com?languages=en&page=' + page + '&stars=' + stars[i])
         
-        sleep(randint(10,17))
+        sleep(randint(8,15))
 
         html_soup = BeautifulSoup(response.text, 'html.parser')
 
         review_container = html_soup.find_all('div', class_='paper_paper__1PY90 paper_square__lJX8a card_card__lQWDv card_noPadding__D8PcU styles_cardWrapper__LcCPA styles_show__HUXRb styles_reviewCard__9HxJJ')
         
         for j in range(len(review_container)):
+            
+            
+            print("Line: {}; Page: {};".format(mes,p))
+            clear_output(wait = True)
+            
+            
             iteration = []
             first_review = review_container[j]
             try:
@@ -67,9 +75,7 @@ for i in range(4):
                 
             except AttributeError:
                 mes = 'no text'
-            finally:
-                print("Line: {}; Page: {};".format(mes,p))
-                clear_output(wait = True)
+            
 
 
 print("DONE.")
