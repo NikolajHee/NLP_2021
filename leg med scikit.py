@@ -1,51 +1,72 @@
+#%%
 #imports
 import numpy as np
-import nltk
 from nltk.corpus import stopwords
-from nltk.tag.brill import Pos
 import string
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+
+#Loading:
 import pandas as pd
 
+path = "Auto/data_set.csv" 
 
-df = pd.read_csv("Auto/data_set.csv")
+df = pd.read_csv(path)
+X = df['Data'] #All_reviews
+y = df['Category'] #Labels
 
-all_reviews = df['Data']
-labels = df['Category']
+
+from sklearn.model_selection import KFold,StratifiedKFold
+k = 5
+kf = StratifiedKFold(n_splits = k, random_state=None)
 
 
-#Vectorise and make model
+#Vectorize
 vectorizer = TfidfVectorizer(max_features=2500, min_df=5, max_df=0.8, stop_words=stopwords.words('english'), ngram_range = (1,2)) 
-processed_features = vectorizer.fit_transform(all_reviews).toarray()
+processed_features = vectorizer.fit_transform(X).toarray()
 
-from sklearn.model_selection import train_test_split
 
-X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.3, random_state=1, stratify=labels)
 
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.model_selection import cross_val_score
+
 
 text_classifier = MultinomialNB()
-text_classifier.fit(X_train, y_train)
-predictions=text_classifier.predict(X_test)
 
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+#result = cross_val_score(text_classifier, processed_features, y, cv=5)
 
-print(confusion_matrix(y_test,predictions))
-print(classification_report(y_test,predictions))
-print(accuracy_score(y_test, predictions))
+acc_score = []
+
+for train_index, test_index in kf.split(processed_features, y):
+    X_train, X_test = processed_features[train_index], processed_features[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    text_classifier.fit(X_train, y_train)
+    pred_values = text_classifier.predict(X_test)
+
+    acc = accuracy_score(pred_values, y_test)
+    acc_score.append(acc)
+
+avg_acc_score = sum(acc_score)/k
 
 
-#%%
+
+
+
+#print(confusion_matrix(y_test,predictions))
+#print(classification_report(y_test,predictions))#
+#print(accuracy_score(y_test, predictions))
 
 
 
 
 print(text_classifier.predict(vectorizer.transform(["my dress fitted perfectly, it was beautiful"])))
 
-print(text_classifier.predict(vectorizer.transform(["my dress was too mall, and the box was horrible"])))
+#print(text_classifier.predict(vectorizer.transform(["my dress was too msall, and the box was horrible"])))
 
 
 
