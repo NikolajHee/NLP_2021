@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn import svm
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 
 
 
@@ -44,7 +44,7 @@ def text_cleaning(a):
 #print(df.iloc[:,1].apply(text_cleaning))
 
 #%%
-bow_transformer = CountVectorizer(analyzer=text_cleaning).fit(X_train)
+bow_transformer = CountVectorizer(analyzer=text_cleaning, ngram_range = (1,2)).fit(X_train)
 
 bow_transformer.vocabulary_
 # %%
@@ -68,7 +68,7 @@ title_tfidf = tfidf_transformer.transform(title_bow)
 from sklearn.naive_bayes import MultinomialNB
 
 
-model = MultinomialNB().fit(title_tfidf,y_train)
+model = MultinomialNB().fit(title_bow,y_train)
 
 
 predictions = model.predict(bow_transformer.transform(X_test))

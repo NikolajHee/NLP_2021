@@ -47,14 +47,16 @@ for docs in neg_reviews:
 labels=pos_reviews_labels+neg_reviews_labels
 
 #Vectorise and make model
-vectorizer = TfidfVectorizer(max_features=2500, min_df=5, max_df=0.8, stop_words=stopwords.words('english')) 
+vectorizer = TfidfVectorizer(max_features=2500, min_df=5, max_df=0.8, stop_words=stopwords.words('english'), ngram_range = (1,2)) 
 processed_features = vectorizer.fit_transform(all_reviews).toarray()
 
 from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.3, random_state=1)
-from sklearn.naive_bayes import CategoricalNB
-text_classifier = CategoricalNB()
+
+from sklearn.naive_bayes import MultinomialNB
+
+text_classifier = MultinomialNB()
 text_classifier.fit(X_train, y_train)
 predictions=text_classifier.predict(X_test)
 
@@ -65,4 +67,15 @@ print(classification_report(y_test,predictions))
 print(accuracy_score(y_test, predictions))
 
 
+#%%
 
+
+
+
+print(text_classifier.predict(vectorizer.transform(["my dress fitted perfectly, it was beautiful"])))
+
+print(text_classifier.predict(vectorizer.transform(["my dress fitted perfectly, it was beautiful"])))
+
+
+
+# %%

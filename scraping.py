@@ -25,7 +25,7 @@ writer.writerow(header)
 
 
 stars = ['1','2','4','5']
-max_pages = [28,18,18,28]
+max_pages = [28,18,20,35]
 category = ['neg','neg','pos','pos']
 
 

@@ -14,9 +14,9 @@ import panda as pd
 
 df = pd.read_csv("Auto/data_set.csv")
 
-df.drop([738,739,740,741,742,743,744,745,746,747,748,749,750,751,752,753,754,755], axis=0, inplace = True)
+df.drop([], axis=0, inplace = True)
 
-df.to_csv("Auto/newest_data_set.csv", index = False)
+df.to_csv("Auto/data_set.csv", index = False)
 
 
 #%%
@@ -26,3 +26,18 @@ df.to_csv("Auto/newest_data_set.csv", index = False)
 def space_after_symbols(document):
     file = open("document")
     
+
+
+#%%
+
+
+#Testing length of data-set
+
+category = 'pos'
+word_count = 0
+
+for line in list(df['Data'][list(df['Category']==category)]):
+    word_count += len(line.split())
+
+print(word_count)
+# %%
