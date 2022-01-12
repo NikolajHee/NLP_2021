@@ -38,7 +38,4 @@ for i in range(int(384/2)):
         scores += 1
     
 
-
-    
-
-
+print("Tak for spillet. Din score blev: {} ud af {}".format(scores, int(384/2)))
