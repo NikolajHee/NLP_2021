@@ -61,7 +61,7 @@ for train_index, test_index in kf.split(processed_features, y):
 
     acc = accuracy_score(pred_values, y_test)
     acc_score.append(acc)
-    print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
+    #print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 
    
 avg_acc_score = sum(acc_score)/k
@@ -81,12 +81,18 @@ print(avg_acc_score)
 
 
 
+Line1 = "my dress fitted perfectly, it was beautiful"
 
-print(text_classifier.predict(vectorizer.transform(["my dress fitted perfectly, it was beautiful"])))
+Line2 = "FUCK THIS SHITTY WEBSITE. MY SHIRT LOOKS LIKE CRAP ITS AWFUL."
+
+print(Line1,":", text_classifier.predict(vectorizer.transform([Line1]))[0])
+
+print(Line2,":", text_classifier.predict(vectorizer.transform([Line2]))[0])
+
 
 #print(text_classifier.predict(vectorizer.transform(["my dress was too msall, and the box was horrible"])))
 
-print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
+#print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 
 
 
