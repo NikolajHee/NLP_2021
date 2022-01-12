@@ -53,13 +53,13 @@ for train_index, test_index in kf.split(processed_features, y):
 
 avg_acc_score = sum(acc_score)/k
 
+predictions = text_classifier.predict(X_test)
 
 
 
-
-#print(confusion_matrix(y_test,predictions))
-#print(classification_report(y_test,predictions))#
-#print(accuracy_score(y_test, predictions))
+print(confusion_matrix(y_test,predictions))
+print(classification_report(y_test,predictions))#
+print(accuracy_score(y_test, predictions))
 
 
 
