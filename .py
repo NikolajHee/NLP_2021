@@ -28,7 +28,7 @@ for i in (index-1):
 
 #print(PP,PF,FP,FF)
 
-
+#%%
 from texttable import Texttable
 t = Texttable()
 t.add_rows([['','AFINN cor', 'AFINN incor'], ['ML cor', PP, FP], ['ML incor',PF,FF ]])
@@ -54,3 +54,5 @@ if result.pvalue > alpha:
 elif result.pvalue < alpha:
     print("reject h0")
 
+
+# %%

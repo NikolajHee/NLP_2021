@@ -44,6 +44,8 @@ acc_score = []
 
 score = np.zeros(len(processed_features))
 
+
+
 for train_index, test_index in kf.split(processed_features, y):
     X_train, X_test = processed_features[train_index], processed_features[test_index]
     y_train, y_test = y[train_index], y[test_index]
@@ -61,6 +63,9 @@ for train_index, test_index in kf.split(processed_features, y):
 
     acc = accuracy_score(pred_values, y_test)
     acc_score.append(acc)
+
+    predictions = text_classifier.predict(X_test)
+    print(confusion_matrix(y_test,predictions))
     #print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 
    
@@ -73,7 +78,7 @@ list_of_index = np.where(score==False)
 
 print(avg_acc_score)
 
-#predictions = text_classifier.predict(X_test)
+#
 
 #print(confusion_matrix(y_test,predictions))
 #print(classification_report(y_test,predictions))#
