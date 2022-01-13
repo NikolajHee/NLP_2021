@@ -44,6 +44,7 @@ from statsmodels.stats.contingency_tables import mcnemar
 table = [[PP,FP],[PF,FF]]
 
 result = mcnemar(table, exact = False, correction = True)
+#correction ved store datasæt
 
 print("Statistic: {}; p-Value {}".format(result.statistic,result.pvalue))
 

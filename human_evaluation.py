@@ -40,3 +40,4 @@ for i in range(int(384/2)):
 
 print("Tak for spillet. Din score blev: {} ud af {}".format(scores, int(384/2)))
 
+print(int(scores/(384/2)*100),"%")
