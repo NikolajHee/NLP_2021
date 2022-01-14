@@ -45,6 +45,7 @@ acc_score = []
 score = np.zeros(len(processed_features))
 
 
+a = []
 
 for train_index, test_index in kf.split(processed_features, y):
     X_train, X_test = processed_features[train_index], processed_features[test_index]
@@ -65,7 +66,8 @@ for train_index, test_index in kf.split(processed_features, y):
     acc_score.append(acc)
 
     predictions = text_classifier.predict(X_test)
-    print(confusion_matrix(y_test,predictions))
+    #print(confusion_matrix(y_test,predictions))
+    a.append(classification_report(y_test,predictions))
     #print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 
    
@@ -82,17 +84,25 @@ print(avg_acc_score)
 
 #print(confusion_matrix(y_test,predictions))
 #print(classification_report(y_test,predictions))#
+
+precision = (0.88+0.88+0.96+0.88+0.90)/5
+recall = (0.85+0.87+0.96+0.87+0.89)/5
+f1 = (0.84+0.87+0.96+0.87+0.89)/5
+
+
+
+
 ##print(accuracy_score(y_test, predictions))
 
 
 
-Line1 = "my dress fitted perfectly, it was beautiful"
+#Line1 = "my dress fitted perfectly, it was beautiful"
 
-Line2 = "FUCK THIS SHITTY WEBSITE. MY SHIRT LOOKS LIKE CRAP ITS AWFUL."
+#Line2 = "FUCK THIS SHITTY WEBSITE. MY SHIRT LOOKS LIKE CRAP ITS AWFUL."
 
-print(Line1,":", text_classifier.predict(vectorizer.transform([Line1]))[0])
+#print(Line1,":", text_classifier.predict(vectorizer.transform([Line1]))[0])
 
-print(Line2,":", text_classifier.predict(vectorizer.transform([Line2]))[0])
+#print(Line2,":", text_classifier.predict(vectorizer.transform([Line2]))[0])
 
 
 #print(text_classifier.predict(vectorizer.transform(["my dress was too msall, and the box was horrible"])))
@@ -100,6 +110,7 @@ print(Line2,":", text_classifier.predict(vectorizer.transform([Line2]))[0])
 #print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 
 
-
-
-# %%
+#Confidence interval
+lower_bound = avg_acc_score - 1.96 * np.sqrt((avg_acc_score*(1-avg_acc_score)/1605))
+upper_bound = avg_acc_score + 1.96 * np.sqrt((avg_acc_score*(1-avg_acc_score)/1605))
+print("[",lower_bound, ";", upper_bound, ']')

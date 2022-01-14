@@ -68,3 +68,8 @@ print ('neg recall:', nltk.recall(refsets['neg'], testsets['neg']))
 print ('neg F-measure:', nltk.f_measure(refsets['neg'], testsets['neg']))
 print(nltk.ConfusionMatrix(labels,tests)) 
 
+print(accuracy)
+#Confidence interval
+lower_bound = accuracy - 1.96 * np.sqrt((accuracy*(1-accuracy)/1605))
+upper_bound = accuracy + 1.96 * np.sqrt((accuracy*(1-accuracy)/1605))
+print("[",lower_bound, ";", upper_bound, ']')

@@ -41,3 +41,16 @@ for i in range(int(384/2)):
 print("Tak for spillet. Din score blev: {} ud af {}".format(scores, int(384/2)))
 
 print(int(scores/(384/2)*100),"%")
+
+#%%
+#calculations
+import numpy as np
+acc = (172+177)/384
+
+
+lower_bound = acc - 1.96 * np.sqrt((acc*(1-acc)/384))
+upper_bound = acc + 1.96 * np.sqrt((acc*(1-acc)/384))
+print("[",lower_bound, ";", upper_bound, ']')
+
+
+# %%
