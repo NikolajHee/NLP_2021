@@ -84,7 +84,7 @@ for train_index, test_index in kf.split(processed_features, y):
     #a.append(classification_report(y_test,predictions))
     #print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
     fpr, tpr, t = roc_curve(list(y_test), preds, pos_label = 'pos')
-    tprs.append(interp(mean_fpr, fpr, tpr))
+    tprs.append(np.interp(mean_fpr, fpr, tpr))
     roc_auc = auc(fpr,tpr)
     aucs.append(roc_auc)
     plt.plot(fpr, tpr, lw=2, alpha=0.3, label = 'ROC FOLD %d (AUC=%0.2f)' % (j,roc_auc))
