@@ -17,7 +17,40 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from sklearn.model_selection import cross_val_score
 
 
+#-----------------------------------
 
+
+
+# precision-recall curve and f1
+from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import f1_score
+from sklearn.metrics import auc
+from matplotlib import pyplot
+
+
+# predict class values
+yhat = text_classifier.predict(X_test)
+lr_precision, lr_recall, _ = precision_recall_curve(y_test, preds, pos_label='pos')
+lr_f1, lr_auc = f1_score(y_test, yhat, pos_label='pos'), auc(lr_recall, lr_precision)
+# summarize scores
+print('Logistic: f1=%.3f auc=%.3f' % (lr_f1, lr_auc))
+# plot the precision-recall curves
+no_skill = len(y_test[y_test==1]) / len(y_test)
+pyplot.plot([0, 1], [no_skill, no_skill], linestyle='--', label='No Skill')
+pyplot.plot(lr_recall, lr_precision, marker='.', label='Logistic')
+# axis labels
+pyplot.xlabel('Recall')
+pyplot.ylabel('Precision')
+# show the legend
+pyplot.legend()
+# show the plot
+pyplot.show()
+
+
+#-----------
 
 #Loading:
 import pandas as pd

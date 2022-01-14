@@ -73,3 +73,8 @@ print(accuracy)
 lower_bound = accuracy - 1.96 * np.sqrt((accuracy*(1-accuracy)/1605))
 upper_bound = accuracy + 1.96 * np.sqrt((accuracy*(1-accuracy)/1605))
 print("[",lower_bound, ";", upper_bound, ']')
+
+
+x = [i[0] for i in ascore]
+
+plt.hist(x, bins = [-27.5,-22.5,-17.5,-12.5,-7.5,-2.5,2.5,7.5,12.5,17.5,22.5,27.5,32.5,37.5,42.5,47.5])
