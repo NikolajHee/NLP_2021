@@ -9,6 +9,11 @@ from sklearn.model_selection import cross_val_score
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
+
+
+
+
+
 #Loading:
 import pandas as pd
 
@@ -19,7 +24,7 @@ X = df['Data'] #All_reviews
 y = df['Category'] #Labels
 
 
-from sklearn.model_selection import KFold,StratifiedKFold
+from sklearn.model_selection import StratifiedKFold
 k = 5
 random_state=None
 kf = StratifiedKFold(n_splits = k, random_state=None)
@@ -85,22 +90,31 @@ print(avg_acc_score)
 #print(confusion_matrix(y_test,predictions))
 #print(classification_report(y_test,predictions))#
 
-precision = (0.88+0.88+0.96+0.88+0.90)/5
-recall = (0.85+0.87+0.96+0.87+0.89)/5
-f1 = (0.84+0.87+0.96+0.87+0.89)/5
+precision_pos = (0.99+0.95+0.96+0.82+0.85)/5
+recall_pos = (0.71+0.79+0.96+0.96+0.97)/5
+f1_pos = (0.82+0.86+0.96+0.88+0.90)/5
 
+precision_neg = (0.77+0.81+0.96+0.95+0.96)/5
+recall_neg = (0.99+0.96+0.96+0.78+0.82)/5
+f1_neg = (0.87+0.88+0.96+0.85+0.88)/5
 
+print(precision_pos,
+recall_pos, 
+f1_pos)
 
+print(precision_neg,
+recall_neg, 
+f1_neg)
 
 ##print(accuracy_score(y_test, predictions))
 
 
 
-#Line1 = "my dress fitted perfectly, it was beautiful"
+Line1 = "my dress fitted perfectly, it was beautiful"
 
 #Line2 = "FUCK THIS SHITTY WEBSITE. MY SHIRT LOOKS LIKE CRAP ITS AWFUL."
 
-#print(Line1,":", text_classifier.predict(vectorizer.transform([Line1]))[0])
+testt = text_classifier.predict(vectorizer.transform([Line1]))[0]
 
 #print(Line2,":", text_classifier.predict(vectorizer.transform([Line2]))[0])
 
