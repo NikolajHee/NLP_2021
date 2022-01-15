@@ -1,11 +1,12 @@
 #%%
 #imports
+from email.mime import text
 import numpy as np
 from nltk.corpus import stopwords
 import string
 from sklearn.model_selection import train_test_split
 from sklearn import svm
-from sklearn.model_selection import cross_val_score
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pylab as plt
 from scipy import interp
@@ -14,7 +15,7 @@ import matplotlib.patches as patches
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from sklearn.model_selection import cross_val_score
+
 
 
 #-----------------------------------
@@ -22,32 +23,15 @@ from sklearn.model_selection import cross_val_score
 
 
 # precision-recall curve and f1
-from sklearn.datasets import make_classification
-from sklearn.linear_model import LogisticRegression
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import f1_score
 from sklearn.metrics import auc
-from matplotlib import pyplot
 
 
 # predict class values
-yhat = text_classifier.predict(X_test)
-lr_precision, lr_recall, _ = precision_recall_curve(y_test, preds, pos_label='pos')
-lr_f1, lr_auc = f1_score(y_test, yhat, pos_label='pos'), auc(lr_recall, lr_precision)
-# summarize scores
-print('Logistic: f1=%.3f auc=%.3f' % (lr_f1, lr_auc))
-# plot the precision-recall curves
-no_skill = len(y_test[y_test==1]) / len(y_test)
-pyplot.plot([0, 1], [no_skill, no_skill], linestyle='--', label='No Skill')
-pyplot.plot(lr_recall, lr_precision, marker='.', label='Logistic')
-# axis labels
-pyplot.xlabel('Recall')
-pyplot.ylabel('Precision')
-# show the legend
-pyplot.legend()
-# show the plot
-pyplot.show()
+
 
 
 #-----------
@@ -73,10 +57,6 @@ vectorizer = TfidfVectorizer(max_features=2500, min_df=5, max_df=0.8, stop_words
 processed_features = vectorizer.fit_transform(X).toarray()
 
 
-
-
-
-
 text_classifier = MultinomialNB()
 
 #result = cross_val_score(text_classifier, processed_features, y, cv=5)
@@ -85,11 +65,20 @@ acc_score = []
 
 score = np.zeros(len(processed_features))
 
+
+f, axes = plt.subplots(1, 2, figsize=(10, 5))
+
 tprs = []
 aucs = []
 mean_fpr = np.linspace(0,1,100)
-a = []
+
+
+#a = []
 j = 1
+
+y_real = []
+y_proba = []
+
 for train_index, test_index in kf.split(processed_features, y):
     X_train, X_test = processed_features[train_index], processed_features[test_index]
     y_train, y_test = y[train_index], y[test_index]
@@ -113,30 +102,58 @@ for train_index, test_index in kf.split(processed_features, y):
 
 
     predictions = text_classifier.predict(X_test)
-    #print(confusion_matrix(y_test,predictions))
-    #a.append(classification_report(y_test,predictions))
-    #print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
+    
     fpr, tpr, t = roc_curve(list(y_test), preds, pos_label = 'pos')
     tprs.append(np.interp(mean_fpr, fpr, tpr))
     roc_auc = auc(fpr,tpr)
     aucs.append(roc_auc)
-    plt.plot(fpr, tpr, lw=2, alpha=0.3, label = 'ROC FOLD %d (AUC=%0.2f)' % (j,roc_auc))
+    axes[0].plot(fpr, tpr, lw=2, alpha=0.3, label = 'ROC FOLD %d (AUC=%0.2f)' % (j,roc_auc))
 
 
+    lr_precision, lr_recall, _ = precision_recall_curve(y_test, preds, pos_label = 'pos')
+    lr_f1, lr_auc = f1_score(y_test, predictions, pos_label = 'pos'), auc(lr_recall, lr_precision)
+    # summarize scores
+    print('Logistic: f1=%.3f auc=%.3f' % (lr_f1, lr_auc))
+    # plot the precision-recall curves
+    no_skill = len(y_test[y_test==1]) / len(y_test)
+
+    #pyplot.plot(lr_recall, lr_precision, lw = 3, alpha = 0.09, marker='.', label='Logistic')
+    lab = 'Fold %d AUC=%.4f' % (j, auc(lr_recall, lr_precision))
+    axes[1].step(lr_recall, lr_precision, label=lab)
+    y_real.append(y_test)
+    y_proba.append(preds)
+   
     j += 1
 
-plt.plot([0,1],[0,1],linestyle = '--',lw = 2,color = 'black')
+
+
+
+axes[1].plot([0, 1], [no_skill, no_skill], linestyle='--', label='No Skill')
+
+y_real = np.concatenate(y_real)
+y_proba = np.concatenate(y_proba)
+precision, recall, _ = precision_recall_curve(y_real, y_proba, pos_label = 'pos')
+lab = 'Overall AUC=%.4f' % (auc(recall, precision))
+axes[1].step(recall, precision, label=lab, lw=2, color='black')
+axes[1].set_xlabel('Recall')
+axes[1].set_ylabel('Precision')
+axes[1].set_title('PR-curve')
+axes[1].legend(loc='lower left', fontsize='small')
+
+
+
+axes[0].plot([0,1],[0,1],linestyle = '--',lw = 2,color = 'black')
 mean_tpr = np.mean(tprs, axis=0)
 mean_auc = auc(mean_fpr, mean_tpr)
-plt.plot(mean_fpr, mean_tpr, color='blue',
+axes[0].plot(mean_fpr, mean_tpr, color='blue',
          label=r'Mean ROC (AUC = %0.2f )' % (mean_auc),lw=2, alpha=1)
 
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC')
-plt.legend(loc="lower right")
-#plt.text(0.32,0.7,'More accurate area',fontsize = 12)
-#plt.text(0.63,0.4,'Less accurate area',fontsize = 12)
+axes[0].set_xlabel('False Positive Rate')
+axes[0].set_ylabel('True Positive Rate')
+axes[0].set_title('ROC')
+axes[0].legend(loc="lower right")
+#axes[0].text(0.32,0.7,'More accurate area',fontsize = 12)
+#axes[0].text(0.63,0.4,'Less accurate area',fontsize = 12)
 plt.show()
 
 avg_acc_score = sum(acc_score)/k
@@ -185,4 +202,9 @@ f1_neg = (0.87+0.88+0.96+0.85+0.88)/5
 #lower_bound = avg_acc_score - 1.96 * np.sqrt((avg_acc_score*(1-avg_acc_score)/1605))
 #upper_bound = avg_acc_score + 1.96 * np.sqrt((avg_acc_score*(1-avg_acc_score)/1605))
 #print("[",lower_bound, ";", upper_bound, ']')
+
+
+#print(confusion_matrix(y_test,predictions))
+#a.append(classification_report(y_test,predictions))
+#print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
 # %%
