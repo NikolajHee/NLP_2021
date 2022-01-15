@@ -6,7 +6,6 @@ from nltk.corpus import stopwords
 import string
 from sklearn.model_selection import train_test_split
 from sklearn import svm
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pylab as plt
 from scipy import interp
@@ -15,15 +14,7 @@ import matplotlib.patches as patches
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-
-
-
-#-----------------------------------
-
-
-
 # precision-recall curve and f1
-
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import f1_score
@@ -117,7 +108,6 @@ for train_index, test_index in kf.split(processed_features, y):
     # plot the precision-recall curves
     no_skill = len(y_test[y_test==1]) / len(y_test)
 
-    #pyplot.plot(lr_recall, lr_precision, lw = 3, alpha = 0.09, marker='.', label='Logistic')
     lab = 'Fold %d AUC=%.4f' % (j, auc(lr_recall, lr_precision))
     axes[1].step(lr_recall, lr_precision, label=lab)
     y_real.append(y_test)
@@ -155,6 +145,10 @@ axes[0].legend(loc="lower right")
 #axes[0].text(0.32,0.7,'More accurate area',fontsize = 12)
 #axes[0].text(0.63,0.4,'Less accurate area',fontsize = 12)
 plt.show()
+
+
+f.tight_layout()
+f.savefig("ROC&PR")
 
 avg_acc_score = sum(acc_score)/k
 
