@@ -116,7 +116,7 @@ for train_index, test_index in kf.split(processed_features, labels):
     axes[1].step(lr_recall, lr_precision, label='FOLD %d AUC=%.2f' % (j, auc(lr_recall, lr_precision)))
     y_real.append(y_test)
     y_proba.append(preds)
-   
+    print()
     j += 1
 
     test = classification_report(y_test,pred_values)
