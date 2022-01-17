@@ -130,8 +130,6 @@ for train_index, test_index in kf.split(processed_features, labels):
     numbers = classification_report(y_test,pred_values)
     #confusion_matrix(y_test,pred_values)
 
-
-
 #PR-curve
 axes[1].plot([0, 1], [no_skill, no_skill], linestyle='--', label='No Skill')
 
@@ -206,7 +204,7 @@ print(line1,":", text_classifier.predict(vectorizer.transform([line1]))[0])
 
 print(line2,":", text_classifier.predict(vectorizer.transform([line2]))[0])
 
-
+print("\n")
 
 #Get most relevant 
 neg_class_prob_sorted = text_classifier.feature_log_prob_[0, :].argsort()[::-1]
