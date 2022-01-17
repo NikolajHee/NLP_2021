@@ -1,6 +1,6 @@
 from os import P_PGID
 from afinn_scores_reviews_v2 import indexwrong
-from INDEX_leg_med_scikitlearn import score
+from Naive_Bayes import score
 import numpy as np
 
 index = np.arange(1,len(indexwrong)+1)
