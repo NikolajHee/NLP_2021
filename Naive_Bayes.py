@@ -68,6 +68,14 @@ y_proba = []
 prediction=[]
 true_labels=[]
 
+#numbers
+pre_neg = []
+pre_pos = []
+rec_neg =[]
+rec_pos =[]
+fscore_neg =[]
+fscore_pos = []
+
 #k-folds cross-validation loop
 for train_index, test_index in kf.split(processed_features, labels):
     X_train, X_test = processed_features[train_index], processed_features[test_index]
@@ -119,8 +127,9 @@ for train_index, test_index in kf.split(processed_features, labels):
     print()
     j += 1
 
-    test = classification_report(y_test,pred_values)
+    numbers = classification_report(y_test,pred_values)
     #confusion_matrix(y_test,pred_values)
+
 
 
 #PR-curve
@@ -168,9 +177,6 @@ plt.show()
 
 print("Average model accuracy: ", avg_acc_score, "\n")
 
-#print(confusion_matrix(y_test,pred_values))
-#print(classification_report(y_test,pred_values))#
-
 precision_pos = (0.99+0.95+0.96+0.82+0.85)/5
 recall_pos = (0.71+0.79+0.96+0.96+0.97)/5
 f1_pos = (0.82+0.86+0.96+0.88+0.90)/5
@@ -202,7 +208,12 @@ print(line2,":", text_classifier.predict(vectorizer.transform([line2]))[0])
 
 
 
-#print(confusion_matrix(y_test,pred_values))
-#a.append(classification_report(y_test,pred_values))
-#print(text_classifier.predict(vectorizer.transform([df['Data'][7]])))
+#Get most relevant 
+neg_class_prob_sorted = text_classifier.feature_log_prob_[0, :].argsort()[::-1]
+pos_class_prob_sorted = text_classifier.feature_log_prob_[1, :].argsort()[::-1]
+
+print(np.take(vectorizer.get_feature_names_out(), neg_class_prob_sorted[:15]))
+print(np.take(vectorizer.get_feature_names_out(), pos_class_prob_sorted[:15]))
+#https://stackoverflow.com/questions/50526898/how-to-get-feature-importance-in-naive-bayes
+
 # %%
