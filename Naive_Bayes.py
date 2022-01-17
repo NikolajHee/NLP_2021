@@ -210,8 +210,9 @@ print("\n")
 neg_class_prob_sorted = text_classifier.feature_log_prob_[0, :].argsort()[::-1]
 pos_class_prob_sorted = text_classifier.feature_log_prob_[1, :].argsort()[::-1]
 
-print(np.take(vectorizer.get_feature_names_out(), neg_class_prob_sorted[:15]))
-print(np.take(vectorizer.get_feature_names_out(), pos_class_prob_sorted[:15]))
+
+print("15 most relevant neg. words:\n", np.take(vectorizer.get_feature_names_out(), neg_class_prob_sorted[:15]), "\n")
+print("15 most relevant pos. words:\n", np.take(vectorizer.get_feature_names_out(), pos_class_prob_sorted[:15]), "\n")
 #https://stackoverflow.com/questions/50526898/how-to-get-feature-importance-in-naive-bayes
 
 # %%
