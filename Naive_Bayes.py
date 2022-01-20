@@ -31,7 +31,8 @@ labels = df['Category'] #Labels
 # =============================================================================
 
 
-#tf-IDF - Vectorizing
+#tf-IDF - Vectorizing 
+#https://stackabuse.com/python-for-nlp-sentiment-analysis-with-scikit-learn/
 vectorizer = TfidfVectorizer(max_features=2500, min_df=5, max_df=0.8, stop_words=stopwords.words('english'), ngram_range = (1,2)) 
 processed_features = vectorizer.fit_transform(reviews).toarray()
 
@@ -51,6 +52,8 @@ score = np.zeros(len(processed_features))
 
 f, axes = plt.subplots(2, figsize=(8, 16))
 
+
+#https://www.kaggle.com/kanncaa1/roc-curve-with-k-fold-cv
 #ROC - graph
 tprs = []
 aucs = []
@@ -77,6 +80,7 @@ fscore_neg =[]
 fscore_pos = []
 
 #k-folds cross-validation loop
+#https://www.askpython.com/python/examples/k-fold-cross-validation
 for train_index, test_index in kf.split(processed_features, labels):
     X_train, X_test = processed_features[train_index], processed_features[test_index]
     y_train, y_test = labels[train_index], labels[test_index]
@@ -117,6 +121,8 @@ for train_index, test_index in kf.split(processed_features, labels):
     aucs.append(roc_auc)
     axes[0].plot(fpr, tpr, lw=2, alpha=0.3, label = 'ROC FOLD %d (AUC=%0.2f)' % (j,roc_auc))
 
+    #https://stackoverflow.com/questions/29656550/how-to-plot-pr-curve-over-10-folds-of-cross-validation-in-scikit-learn
+    #https://machinelearningmastery.com/roc-curves-and-precision-recall-curves-for-classification-in-python/
     #PR-data
     lr_precision, lr_recall, _ = precision_recall_curve(y_test, preds, pos_label = 'pos')
     lr_f1, lr_auc = f1_score(y_test, pred_values, pos_label = 'pos'), auc(lr_recall, lr_precision)
@@ -124,7 +130,6 @@ for train_index, test_index in kf.split(processed_features, labels):
     axes[1].step(lr_recall, lr_precision, label='FOLD %d AUC=%.2f' % (j, auc(lr_recall, lr_precision)))
     y_real.append(y_test)
     y_proba.append(preds)
-    print()
     j += 1
 
     numbers = classification_report(y_test,pred_values)
@@ -175,20 +180,6 @@ plt.show()
 
 print("Average model accuracy: ", avg_acc_score, "\n")
 
-precision_pos = (0.99+0.95+0.96+0.82+0.85)/5
-recall_pos = (0.71+0.79+0.96+0.96+0.97)/5
-f1_pos = (0.82+0.86+0.96+0.88+0.90)/5
-
-precision_neg = (0.77+0.81+0.96+0.95+0.96)/5
-recall_neg = (0.99+0.96+0.96+0.78+0.82)/5
-f1_neg = (0.87+0.88+0.96+0.85+0.88)/5
-
-print("precision_pos: ", precision_pos)
-print("precision_neg: ", precision_neg)
-print("recall_pos: ", recall_pos)
-print("recall_neg: ", recall_neg)
-print("f1_pos: ", f1_pos)
-print("f1_neg: ", f1_neg, "\n")
 
 #Confidence interval
 lower_bound = avg_acc_score - 1.96 * np.sqrt((avg_acc_score*(1-avg_acc_score)/1605))
@@ -203,6 +194,8 @@ line2 = "THIS IS A STUPID WEBSITE. MY SHIRT LOOKS SO BAD ITS AWFUL."
 print(line1,":", text_classifier.predict(vectorizer.transform([line1]))[0])
 
 print(line2,":", text_classifier.predict(vectorizer.transform([line2]))[0])
+
+
 
 print("\n")
 

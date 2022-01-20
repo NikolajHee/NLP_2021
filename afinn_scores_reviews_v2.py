@@ -9,6 +9,8 @@ from nltk.metrics.scores import (precision, recall, f_measure)
 from nltk.metrics import ConfusionMatrix
 import collections
 
+#https://github.com/fnielsen/afinn
+
 afinn=Afinn()
 
 path = 'Auto/data_set.csv'
@@ -78,3 +80,23 @@ print("[",lower_bound, ";", upper_bound, ']')
 x = [i[0] for i in ascore]
 
 plt.hist(x, bins = [-27.5,-22.5,-17.5,-12.5,-7.5,-2.5,2.5,7.5,12.5,17.5,22.5,27.5,32.5,37.5,42.5,47.5])
+
+
+
+#%%
+from sklearn.metrics import roc_curve,auc
+
+fpr, tpr, t = roc_curve([a[1] for a in all_reviews],indexwrong, pos_label = 'pos')
+
+roc_auc = auc(fpr,tpr)
+
+plt.plot(fpr, tpr, lw=2, alpha=0.3, label = 'ROC FOLD %d (AUC=%0.2f)' % (j,roc_auc))
+
+plt.plot([0,1],[0,1],linestyle = '--',lw = 2,color = 'black')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC')
+plt.legend(loc="lower right")
+plt.show()
+
+# %%

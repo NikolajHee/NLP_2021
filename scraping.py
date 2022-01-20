@@ -1,3 +1,5 @@
+
+#created with https://www.dataquest.io/blog/web-scraping-beautifulsoup/
 from requests import get
 from time import sleep
 from random import randint
@@ -79,8 +81,6 @@ for i in range(4):
 
 
 print("DONE.")
-
-
 
 
 
