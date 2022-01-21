@@ -1,8 +1,15 @@
+#Human Evaluation
+#---------------------------------------------------------------------------------
+#Script for evaluating humamn performance as a classifier. 
+
+
+
+
 import csv
 import pandas as pd
 import random
 
-df = pd.read_csv("Auto/data_set.csv")
+df = pd.read_csv("data_set.csv")
 
 all_reviews = list(zip(df['Data'],df['Category']))
 

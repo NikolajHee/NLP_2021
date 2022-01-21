@@ -1,11 +1,21 @@
+#MCNEMAR
+#-------------------------------------------
+#Script for making the McNemar test
+
+
+
+
+
+
+
 from os import P_PGID
-from afinn_scores_reviews_v2 import indexwrong
+from afinn_scores_reviews_v2 import correct_index
 from Naive_Bayes import score
 import numpy as np
 
-index = np.arange(1,len(indexwrong)+1)
+index = np.arange(1,len(correct_index)+1)
 
-array = np.array(indexwrong)
+array = np.array(correct_index)
 
 #table = np.transpose(np.vstack((index,score,array))).astype(int)
 

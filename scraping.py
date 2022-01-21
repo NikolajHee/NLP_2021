@@ -1,5 +1,12 @@
 
+#SCRAPING
+#----------------------------------------------
+#Script for downloading trustpilot reviews.
 #created with https://www.dataquest.io/blog/web-scraping-beautifulsoup/
+
+
+
+
 from requests import get
 from time import sleep
 from random import randint
@@ -13,16 +20,13 @@ import csv
 
 #textfile = open('Auto/auto_'+stars+'stjerner.txt', 'w')
 
-f = open('Auto/newest_newest_data_set.csv','w')
+f = open('Auto/data_set.csv','w')
 
 writer = csv.writer(f)
 
 header = ['Title','Data','Category']
 
 writer.writerow(header)
-
-
-
 
 
 

@@ -1,22 +1,31 @@
+
+
+#NAIVE BAYES MODEL
+#-------------------------------------------------------------------------------------
+#Nikolaj og Gustav
+
+
+
+
 #imports
 import numpy as np
 from nltk.corpus import stopwords
-from sklearn import svm
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pylab as plt
 from sklearn.metrics import roc_curve,auc
 import matplotlib.patches as patches
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, ConfusionMatrixDisplay
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import f1_score
 from sklearn.metrics import auc
+from sklearn.metrics import (precision_score,recall_score,f1_score)
 import pandas as pd
 
 
 #Loading data into variables:
-path = "Auto/data_set.csv" 
+path = "data_set.csv" 
 
 df = pd.read_csv(path)
 reviews = df['Data'] #All_reviews
@@ -44,12 +53,12 @@ k = 5
 random_state=None
 kf = StratifiedKFold(n_splits = k, random_state=random_state)
 
-
+#variables
 acc_score = []
-
 score = np.zeros(len(processed_features))
 
 
+#subplots
 f, axes = plt.subplots(2, figsize=(8, 16))
 
 
@@ -171,7 +180,6 @@ avg_acc_score = sum(acc_score)/k
 list_of_index = np.where(score==False)
 
 #Confusion matrix
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix(true_labels,prediction), display_labels=["neg","pos"])
 disp.plot()
 plt.title('Confusion matrix: Naive Bayes')
@@ -179,6 +187,37 @@ plt.show()
 
 
 print("Average model accuracy: ", avg_acc_score, "\n")
+
+
+#calculating recall, precision and f1-score, along with their confidence intervals with scikit-learn
+precision_pos = precision_score(true_labels,prediction,pos_label="pos")
+recall_pos = recall_score(true_labels,prediction,pos_label="pos")
+f1_pos = f1_score(true_labels,prediction,pos_label="pos")
+
+precision_neg = precision_score(true_labels,prediction,pos_label="neg")
+recall_neg = recall_score(true_labels,prediction,pos_label="neg")
+f1_neg = f1_score(true_labels,prediction,pos_label="neg")
+
+print("precision_pos: ", precision_pos)
+print("[",precision_pos-1.96*np.sqrt(precision_pos*(1-precision_pos)/1605)," ; ",precision_pos+1.96*np.sqrt(precision_pos*(1-precision_pos)/1605),"]")
+
+print("precision_neg: ", precision_neg)
+print("[",precision_neg-1.96*np.sqrt(precision_neg*(1-precision_neg)/1605)," ; ",precision_neg+1.96*np.sqrt(precision_neg*(1-precision_neg)/1605),"]")
+
+print("recall_pos: ", recall_pos)
+print("[",recall_pos-1.96*np.sqrt(recall_pos*(1-recall_pos)/1605)," ; ",recall_pos+1.96*np.sqrt(recall_pos*(1-recall_pos)/1605),"]")
+
+print("recall_neg: ", recall_neg)
+print("[",recall_neg-1.96*np.sqrt(recall_neg*(1-recall_neg)/1605)," ; ",recall_neg+1.96*np.sqrt(recall_neg*(1-recall_neg)/1605),"]")
+
+
+print("f1_pos: ", f1_pos)
+print("[",f1_pos-1.96*np.sqrt(f1_pos*(1-f1_pos)/1605)," ; ",f1_pos+1.96*np.sqrt(f1_pos*(1-f1_pos)/1605),"]")
+
+
+print("f1_neg: ", f1_neg, "\n")
+print("[",f1_neg-1.96*np.sqrt(f1_neg*(1-f1_neg)/1605)," ; ",f1_neg+1.96*np.sqrt(f1_neg*(1-f1_neg)/1605),"]")
+
 
 
 #Confidence interval

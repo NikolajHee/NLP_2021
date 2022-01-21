@@ -1,35 +1,41 @@
+
+
+#AFINN MODEL
+#--------------------------------------------------------------------
+#Nikolaj og Gustav
+
+
+
+
+#imports
 from afinn import Afinn
 import numpy as np
+import nltk
 import random
 import matplotlib.pyplot as plt
 import csv
 import pandas as pd
-import nltk
-from nltk.metrics.scores import (precision, recall, f_measure)
-from nltk.metrics import ConfusionMatrix
 import collections
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
 
 #https://github.com/fnielsen/afinn
-
+#Define afinn
 afinn=Afinn()
 
-path = 'Auto/data_set.csv'
+#Load data
+path = 'data_set.csv'
 df = pd.read_csv(path)
-
 all_reviews = list(zip(df['Data'],df['Category']))
 
-
-#Calculate accuracy
-ascore=[]
+#Get all scores
+afinn_scores=np.zeros(1605)
 for i in range(len(all_reviews)):
- a=afinn.score(all_reviews[i][0])
- if (a<0)or (a==0):
-     cat='neg'
- elif a>0:
-     cat='pos'
- ascore.append((a,cat))
+    a=afinn.score(all_reviews[i][0])
+    afinn_scores[i]=a
 
 
+#Function classifiying a review(text string) as positive or negative
 def afinnclassifier(review):
     a=afinn.score(review)
     if (a<0)or(a==0):
@@ -39,64 +45,60 @@ def afinnclassifier(review):
     return cat
 
 
-correct=0
-indexwrong=[]
-for i in range(len(ascore)):
- if ([q[1] for q in ascore][i])==([q[1] for q in all_reviews][i]):
-     correct+=1
-     indexwrong.append(1)
- else:
-     indexwrong.append(0)
-     
-accuracy=correct/len(ascore)      
-#print(accuracy)
-
-refsets = collections.defaultdict(set)
+#Creating set of refernce values and test values + labels and classified labels
+referencesets = collections.defaultdict(set)
 testsets = collections.defaultdict(set)
 labels=[]
 tests=[]
 for i, (feats, label) in enumerate(all_reviews):
-    refsets[label].add(i)
+    referencesets[label].add(i)
     observed = afinnclassifier(feats)
     testsets[observed].add(i)
     labels.append(label)
     tests.append(observed)
 
-print ('pos precision:', nltk.precision(refsets['pos'], testsets['pos']))
-print ('pos recall:', nltk.recall(refsets['pos'], testsets['pos']))
-print ('pos F-measure:', nltk.f_measure(refsets['pos'], testsets['pos']))
-print ('neg precision:', nltk.precision(refsets['neg'], testsets['neg']))
-print ('neg recall:', nltk.recall(refsets['neg'], testsets['neg']))
-print ('neg F-measure:', nltk.f_measure(refsets['neg'], testsets['neg']))
-print(nltk.ConfusionMatrix(labels,tests)) 
+#Calculate accuracy
+correct=0
+correct_index=np.zeros(len(labels))
+for i in range(len(labels)):
+ if labels[i]==tests[i]:
+     correct+=1
+     correct_index[i]=(1)
+ else:
+     correct_index[i]=(0)
+accuracy=correct/len(labels) 
 
-print(accuracy)
-#Confidence interval
-lower_bound = accuracy - 1.96 * np.sqrt((accuracy*(1-accuracy)/1605))
-upper_bound = accuracy + 1.96 * np.sqrt((accuracy*(1-accuracy)/1605))
-print("[",lower_bound, ";", upper_bound, ']')
+#Print and calculate different metrics
+print ('Accuracy:', accuracy)
+print ('pos precision:', nltk.precision(referencesets['pos'], testsets['pos']))
+print ('pos recall:', nltk.recall(referencesets['pos'], testsets['pos']))
+print ('pos F-measure:', nltk.f_measure(referencesets['pos'], testsets['pos']))
+print ('neg precision:', nltk.precision(referencesets['neg'], testsets['neg']))
+print ('neg recall:', nltk.recall(referencesets['neg'], testsets['neg']))
+print ('neg F-measure:', nltk.f_measure(referencesets['neg'], testsets['neg']))
+#print(nltk.ConfusionMatrix(labels,tests))
 
-
-x = [i[0] for i in ascore]
-
-plt.hist(x, bins = [-27.5,-22.5,-17.5,-12.5,-7.5,-2.5,2.5,7.5,12.5,17.5,22.5,27.5,32.5,37.5,42.5,47.5])
-
-
-
-#%%
-from sklearn.metrics import roc_curve,auc
-
-fpr, tpr, t = roc_curve([a[1] for a in all_reviews],indexwrong, pos_label = 'pos')
-
-roc_auc = auc(fpr,tpr)
-
-plt.plot(fpr, tpr, lw=2, alpha=0.3, label = 'ROC FOLD %d (AUC=%0.2f)' % (j,roc_auc))
-
-plt.plot([0,1],[0,1],linestyle = '--',lw = 2,color = 'black')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC')
-plt.legend(loc="lower right")
+#Confusion matrix plot
+disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix(labels,tests), display_labels=["neg","pos"])
+disp.plot()
+plt.title('Confusion matrix: AFINN')
 plt.show()
 
-# %%
+#Afinn score plot
+afinnscorespos=[]
+for i in range(13):
+    afinnscorespos.append(np.count_nonzero(afinn_scores==i))
+t=-12
+afinnscoresneg=[]
+for i in range(12):
+    afinnscoresneg.append(np.count_nonzero(afinn_scores==t))
+    t=t+1
+    
+#histogram showing data distribution
+fig = plt.figure()
+ax = fig.add_axes([0,0,1,1])
+etiket = ["-12","-11","-10","-9","-8","-7","-6","-5","-4","-3","-2","-1",'0', '1', '2', '3', '4',"5","6","7","8","9","10","11","12"]
+ax.bar(etiket,afinnscoresneg+afinnscorespos)
+plt.xlabel("Score")
+plt.ylabel("Count")
+plt.show()

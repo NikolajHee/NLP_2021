@@ -12,7 +12,7 @@ import panda as pd
 #%%
 
 
-df = pd.read_csv("Auto/data_set.csv")
+df = pd.read_csv("data_set.csv")
 
 df.drop([], axis=0, inplace = True)
 
